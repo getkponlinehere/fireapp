@@ -36,27 +36,19 @@ var firebaseConfig = {
       });
   });
 
-  loadButton.addEventListener("click",function(){
-    //   docRef.get().then(function(doc){
-    //       if(doc && doc.exists){
-    //           const mydata=doc.data();
-    //           status.innerText=mydata.testdata;
-    //       }
-    //   }).catch(function (error){
-    //       alert(error);
-    //   });
-    //firestore.settings({timestampsInSnapshots: true});
-    // const collection = firestore.collection('samples');
-    // collection.get().then(snapshot=>{
-    //     snapshot.forEach(doc=>{
-    //         alert(doc.testdata);
-    //     });
-    // });
-
-    function show(doc){
-        alert("Testdata:"+doc.data().testdata);
-        alert("Testdata1:"+doc.data().testdata1);
+function show(doc){
+        // alert("Testdata:"+doc.data().testdata);
+        // alert("Testdata1:"+doc.data().testdata1);
+        var tableref=document.getElementById("table_id").getElementsByTagName('tbody')[0];
+        var newRow = tableref.insertRow();
+        var newCell = newRow.insertCell(0);
+        var newCell1 = newRow.insertCell(1);
+        var newText = document.createTextNode(doc.data().testdata);
+        var newText1 = document.createTextNode(doc.data().testdata1);
+        newCell.appendChild(newText);
+        newCell1.appendChild(newText1);
     }
+  loadButton.addEventListener("click",function(){
     firestore.collection("samples")//.where("capital", "==", true)
     .get()
     .then(function(querySnapshot) {
@@ -73,19 +65,37 @@ var firebaseConfig = {
   });
   
   
-  getRealtimeUpdates = function(){
-      alert("hello");
-    firestore.collection("samples")//.where("capital", "==", true)
-    .get()
-    .then(function(querySnapshot) {
+ getRealtimeUpdates = function(){
+    //  alert("hello");
+    //     firestore.collection("samples").onSnapshot(function(doc){
+    //     if(doc && doc.exists){
+    //             show(doc);
+    //             //const mydata=doc.data();
+
+    //             //status.innerText=mydata.testdata;
+    //         }
+    //    });
+    // firestore.collection("samples")//.where("capital", "==", true)
+    // .get()
+    // .then(function(querySnapshot) {
+    //     querySnapshot.forEach(function(doc) {
+    //         // doc.data() is never undefined for query doc snapshots
+    //         show(doc);
+    //     });
+    // })
+    // .catch(function(error) {
+    //    console.log("Error getting documents: ", error);
+    // });
+
+    firestore.collection("samples")//.where("state", "==", "CA")
+    .onSnapshot(function(querySnapshot) {
+        var cities = [];
         querySnapshot.forEach(function(doc) {
-            // doc.data() is never undefined for query doc snapshots
+            //cities.push(doc.data().name);
             show(doc);
         });
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
+        //console.log("Current cities in CA: ", cities.join(", "));
     });
 
    }
-  getRealtimeUpdates();
+  //getRealtimeUpdates();
